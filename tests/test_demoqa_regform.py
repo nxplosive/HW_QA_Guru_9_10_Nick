@@ -3,9 +3,9 @@ import os.path
 
 
 def test_reg_from():
-    browser.open('/')
+    browser.open('/automation-practice-form')
 
-    #Enter data
+    # Enter data
     browser.element('.pattern-backgound').should(have.exact_text('Practice Form'))
 
     browser.element('#firstName').should(be.blank).type('Nikitron')
@@ -29,20 +29,19 @@ def test_reg_from():
     browser.element('#react-select-4-input').type('Delhi').press_enter()
     browser.element('#submit').press_enter()
 
-    #Check
+    # Check
     browser.element('.modal-header').should(have.text('Thanks for submitting the form'))
     browser.element('.table-responsive').should(have.text(
-        'Nikitron Safronoffskikh' and
-        'niksaff@gmail.com' and
-        'Male' and
-        '9151232211' and
-        '15 December,1988' and
-        'English' and
-        'Music' and
-        'avatar.jpg' and
-        'Morder, Zombie street, 666' and
-        'NCR Delhi'
+        'Nikitron Safronoffskikh'
+        and 'niksaff@gmail.com'
+        and 'Male'
+        and '9151232211'
+        and '15 December,1988'
+        and 'English'
+        and 'Music'
+        and 'avatar.jpg'
+        and 'Morder, Zombie street, 666'
+        and 'NCR Delhi'
     ))
-    #Bye
+    # Bye
     browser.element('#closeLargeModal').press_enter()
-
