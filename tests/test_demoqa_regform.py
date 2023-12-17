@@ -1,47 +1,34 @@
-from selene import browser, have, be, by
-import os.path
+from selene import have
+from pages.registration_page import MidLevelRegPage
 
 
-def test_reg_from():
-    browser.open('/automation-practice-form')
-
-    # Enter data
-    browser.element('.pattern-backgound').should(have.exact_text('Practice Form'))
-
-    browser.element('#firstName').should(be.blank).type('Nikitron')
-    browser.element('#lastName').should(be.blank).type('Safronoffskikh')
-    browser.element('#userEmail').should(be.blank).type('niksaff@gmail.com')
-    browser.element('#gender-radio-1').double_click()
-    browser.element('#userNumber').should(be.blank).type('9151232211')
-
-    browser.element('#dateOfBirthInput').click()
-    browser.element('.react-datepicker__year-select').type('1988').press_enter()
-    browser.element('.react-datepicker__month-select').type('December').press_enter()
-    browser.element('.react-datepicker__day--015').click()
-
-    browser.element('#subjectsInput').should(be.blank).type('English').press_enter()
-    browser.element('[for="hobbies-checkbox-3"]').click()
-
-    browser.element('#uploadPicture').send_keys(os.path.abspath('picture/avatar.jpg'))
-
-    browser.element('#currentAddress').should(be.blank).type('Morder, Zombie street, 666')
-    browser.element('#react-select-3-input').type('NCR').press_enter()
-    browser.element('#react-select-4-input').type('Delhi').press_enter()
-    browser.element('#submit').press_enter()
-
-    # Check
-    browser.element('.modal-header').should(have.text('Thanks for submitting the form'))
-    browser.element('.table-responsive').should(have.text(
-        'Nikitron Safronoffskikh'
-        and 'niksaff@gmail.com'
-        and 'Male'
-        and '9151232211'
-        and '15 December,1988'
-        and 'English'
-        and 'Music'
-        and 'avatar.jpg'
-        and 'Morder, Zombie street, 666'
-        and 'NCR Delhi'
-    ))
-    # Bye
-    browser.element('#closeLargeModal').press_enter()
+def test_reg_form():
+    reg_page = MidLevelRegPage()
+    reg_page.open()
+    # WHEN
+    reg_page.fill_first_name('Nikita')
+    reg_page.fill_last_name('Safonov')
+    reg_page.fill_email('niksaff@gmail.com')
+    reg_page.choose_gender('Male')
+    reg_page.fill_phone_number('9151232211')
+    reg_page.fill_date_of_birth('15', 'December', '1990')
+    reg_page.choose_subjects('English', 'Maths')
+    reg_page.choose_hobbies('Sports', 'Reading', 'Music')
+    reg_page.upload_picture('avatar.jpg')
+    reg_page.fill_address('Zombie Land')
+    reg_page.choose_state_and_city('NCR', 'Delhi')
+    reg_page.submit_form()
+    # THEN
+    reg_page.check_header('Thanks for submitting the form')
+    reg_page.check_user_info(
+        'Nikita Safonov',
+        'niksaff@gmail.com',
+        'Male',
+        '9151232211',
+        '15 December,1990',
+        'English, Maths',
+        'Sports, Reading, Music',
+        'avatar.jpg',
+        'Zombie Land',
+        'NCR Delhi')
+    reg_page.close_form()
